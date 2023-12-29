@@ -1,0 +1,30 @@
+
+
+.user-png {
+  width: 40px; 
+  height: 40px; 
+  border-radius: 50%; 
+}
+
+
+.navbar-brand {
+  color: #3498db;
+  font-size: 28px; 
+  font-weight: normal; 
+}
+
+
+.btn-nav {
+  background-color: #e74c3c; 
+  border-radius: 8px; 
+  color: #fff; 
+  font-weight: bold;
+  text-decoration: none; 
+  padding: 10px 20px; 
+  margin: 5px; 
+  cursor: pointer;
+}
+
+.btn-nav:hover {
+  background-color: #c0392b; 
+}
