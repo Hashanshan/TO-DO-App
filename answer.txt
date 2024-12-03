@@ -1,0 +1,532 @@
+.data
+menu:       .asciiz "\nAdding Machine\n\nInitial Value: 0\n\nCommands:\n0 - Add\n1 - Subtract\n2 - Multiply\n3 - Divide\n4 - Clear\n5 - Exit\n\n"
+command_msg: .asciiz "Enter a command: "
+add_prompt: .asciiz "\nEnter a value to add: "
+sub_prompt: .asciiz "\nEnter a value to subtract: "
+mul_prompt: .asciiz "\nEnter a value to multiply: "
+div_prompt: .asciiz "\nEnter a value to divide: "
+result_msg: .asciiz "\nThe current value: "
+clear_msg:  .asciiz "\nValue cleared to 0.\n"
+exit_msg:   .asciiz "\nExiting program.\n"
+invalid_msg: .asciiz "\nInvalid command. Please try again.\n"
+new_line:    .asciiz "\n"
+
+.text
+.globl main
+
+main:
+    # Initialize the current value to 0
+    li $t0, 0
+
+    # Display the menu once
+    li $v0, 4
+    la $a0, menu
+    syscall
+
+menu_loop:
+    # Prompt for a command
+    li $v0, 4
+    la $a0, command_msg
+    syscall
+
+    # Read the user's command
+    li $v0, 5
+    syscall
+    move $t1, $v0
+
+    # Handle commands
+    beq $t1, 0, add
+    beq $t1, 1, subtract
+    beq $t1, 2, multiply
+    beq $t1, 3, divide
+    beq $t1, 4, clear
+    beq $t1, 5, exit
+    j invalid_command
+
+add:
+    li $v0, 4
+    la $a0, add_prompt
+    syscall
+    li $v0, 5
+    syscall
+    add $t0, $t0, $v0
+    j print_result
+
+subtract:
+    li $v0, 4
+    la $a0, sub_prompt
+    syscall
+    li $v0, 5
+    syscall
+    sub $t0, $t0, $v0
+    j print_result
+
+multiply:
+    li $v0, 4
+    la $a0, mul_prompt
+    syscall
+    li $v0, 5
+    syscall
+    mul $t0, $t0, $v0
+    j print_result
+
+divide:
+    li $v0, 4
+    la $a0, div_prompt
+    syscall
+    li $v0, 5
+    syscall
+    beqz $v0, division_by_zero
+    div $t0, $t0, $v0
+    j print_result
+
+division_by_zero:
+    li $v0, 4
+    la $a0, invalid_msg
+    syscall
+    j menu_loop
+
+clear:
+    li $t0, 0
+    li $v0, 4
+    la $a0, clear_msg
+    syscall
+    j menu_loop
+
+print_result:
+    # Print the current value
+    li $v0, 4
+    la $a0, result_msg
+    syscall
+    li $v0, 1
+    move $a0, $t0
+    syscall
+
+    # Print a blank line
+    li $v0, 4
+    la $a0, new_line
+    syscall
+    j menu_loop
+
+exit:
+    li $v0, 4
+    la $a0, exit_msg
+    syscall
+    li $v0, 10
+    syscall
+
+invalid_command:
+    li $v0, 4
+    la $a0, invalid_msg
+    syscall
+    j menu_loop
+	
+<-positive->
+.data
+prompt:      .asciiz "Enter an integer: "
+PositiveNumber: .asciiz "The number is positive.\n"
+NegativeNumber: .asciiz "The number is negative.\n"
+ZeroNumber:  .asciiz "The number is zero.\n"
+
+.text
+main:
+   
+    li $v0, 4               
+    la $a0, prompt          
+    syscall
+
+    
+    li $v0, 5               
+    syscall
+    move $t0, $v0           
+
+    # Check if the number is greater than 0 (positive)
+    sgt $t1, $t0, $zero     
+    beqz $t1, check_zero    
+
+    # If number is positive, print positive message
+    la $a0, PositiveNumber  
+    li $v0, 4               
+    syscall
+    j end_program           
+
+check_zero:
+    # If number is zero, check if $t0 == 0
+    beqz $t0, print_zero    
+
+    # If number is negative, print negative message
+    la $a0, NegativeNumber  
+    li $v0, 4             
+    syscall
+    j end_program           
+
+print_zero:
+    # If number is zero, print the zero message
+    la $a0, ZeroNumber     
+    li $v0, 4               
+    syscall
+
+end_program:
+    li $v0, 10              
+    syscall
+
+<-integer->
+.data
+# Prompts for user input
+intPrompt: .asciiz "Enter an integer: "
+floatPrompt: .asciiz "Enter a float: "
+
+# Variables to store input values
+inputInt: .word 0          # Reserve space for an integer
+inputFloat: .float 0.0     # Reserve space for a float
+
+.text
+# Main program
+main:
+    # Read and print an integer
+    jal readInt            # Call subprogram to read an integer
+    jal printInt           # Call subprogram to print the integer
+
+    # Read and print a float
+    jal readFloat          # Call subprogram to read a float
+    jal printFloat         # Call subprogram to print the float
+
+    # Exit program
+    li $v0, 10             # System call for program termination
+    syscall
+
+# Subprogram to read an integer
+readInt:
+    li $v0, 4              # System call for printing a string
+    la $a0, intPrompt      # Load address of the integer prompt
+    syscall
+
+    li $v0, 5              # System call for reading an integer
+    syscall
+    sw $v0, inputInt       # Store the result in memory
+    jr $ra                 # Return to the caller
+
+# Subprogram to print an integer
+printInt:
+    lw $a0, inputInt       # Load the integer from memory
+    li $v0, 1              # System call for printing an integer
+    syscall
+    jr $ra                 # Return to the caller
+
+# Subprogram to read a float
+readFloat:
+    li $v0, 4              # System call for printing a string
+    la $a0, floatPrompt    # Load address of the float prompt
+    syscall
+
+    li $v0, 6              # System call for reading a float
+    syscall
+    swc1 $f0, inputFloat   # Store the float result in memory
+    jr $ra                 # Return to the caller
+
+# Subprogram to print a float
+printFloat:
+    lwc1 $f12, inputFloat  # Load the float from memory
+    li $v0, 2              # System call for printing a float
+    syscall
+    jr $ra                 # Return to the caller
+	
+<-3x-5y-->
+.data
+# Prompts and result messages
+intXPrompt: .asciiz "Enter integer x: "
+intYPrompt: .asciiz "Enter integer y: "
+floatXPrompt: .asciiz "Enter float x: "
+floatYPrompt: .asciiz "Enter float y: "
+intResultMsg: .asciiz "Result (integer): "
+floatResultMsg: .asciiz "\nResult (float): "
+
+.text
+.globl main
+
+main:
+    # Integer calculations
+    li $v0, 4                   # Print string syscall
+    la $a0, intXPrompt          # Prompt for x
+    syscall
+
+    jal readInt                 # Read integer x
+    move $t0, $v0               # Store x in $t0
+
+    li $v0, 4                   # Print string syscall
+    la $a0, intYPrompt          # Prompt for y
+    syscall
+
+    jal readInt                 # Read integer y
+    move $t1, $v0               # Store y in $t1
+
+    # Calculate 3x - 5y for integers
+    li $t2, 3                   # Load 3
+    mul $t3, $t0, $t2           # t3 = 3 * x
+
+    li $t2, 5                   # Load 5
+    mul $t4, $t1, $t2           # t4 = 5 * y
+
+    sub $t5, $t3, $t4           # t5 = 3x - 5y
+
+    # Print integer result
+    li $v0, 4                   # Print string syscall
+    la $a0, intResultMsg        # Load result message
+    syscall
+
+    move $a0, $t5               # Load result into $a0
+    li $v0, 1                   # Print integer syscall
+    syscall
+
+    # Floating-point calculations
+    li $v0, 4                   # Print string syscall
+    la $a0, floatXPrompt        # Prompt for x
+    syscall
+
+    jal readFloat               # Read float x
+    mov.s $f2, $f0              # Store x in $f2
+
+    li $v0, 4                   # Print string syscall
+    la $a0, floatYPrompt        # Prompt for y
+    syscall
+
+    jal readFloat               # Read float y
+    mov.s $f4, $f0              # Store y in $f4
+
+    # Calculate 3x - 5y for floating-point
+    li.s $f6, 3.0               # Load 3.0
+    mul.s $f8, $f2, $f6         # f8 = 3.0 * x
+
+    li.s $f6, 5.0               # Load 5.0
+    mul.s $f10, $f4, $f6        # f10 = 5.0 * y
+
+    sub.s $f12, $f8, $f10       # f12 = 3x - 5y
+
+    # Print floating-point result
+    li $v0, 4                   # Print string syscall
+    la $a0, floatResultMsg      # Load result message
+    syscall
+
+    mov.s $f12, $f12            # Load result into $f12
+    li $v0, 2                   # Print float syscall
+    syscall
+
+    # Exit program
+    li $v0, 10                  # Exit syscall
+    syscall
+
+# Subprograms for numLib
+# Read integer subroutine
+readInt:
+    li $v0, 5                   # Read integer syscall
+    syscall
+    jr $ra
+
+# Read float subroutine
+readFloat:
+    li $v0, 6                   # Read float syscall
+    syscall
+    jr $ra
+	
+<- 9to1->
+.data
+newline: .asciiz "\n"
+
+.text
+.globl main
+
+main:
+    li $t0, 9       # Start number
+loop:
+    move $a0, $t0
+    li $v0, 1       # Print integer
+    syscall
+
+    li $v0, 4       # Print newline
+    la $a0, newline
+    syscall
+
+    subi $t0, $t0, 1            addi 
+    bnez $t0, loop  # Continue until $t0 becomes zero  ble
+
+    li $v0, 10      # Exit
+    syscall
+	
+<-fac-->
+
+.data
+prompt: .asciiz "Enter a number: "
+resultMsg: .asciiz "Factorial is: "
+
+.text
+.globl main
+
+main:
+    # Prompt for number
+    li $v0, 4
+    la $a0, prompt
+    syscall
+
+    # Read number
+    li $v0, 5
+    syscall
+    move $t0, $v0  # Store number in $t0
+
+    li $t1, 1      # Initialize result to 1
+    li $t2, 1      # Loop counter
+
+factorial_loop:
+    mul $t1, $t1, $t2
+    addi $t2, $t2, 1
+    bgt $t2, $t0, end_loop
+    j factorial_loop
+
+end_loop:
+    # Print result
+    li $v0, 4
+    la $a0, resultMsg
+    syscall
+    move $a0, $t1
+    li $v0, 1
+    syscall
+
+    # Exit
+    li $v0, 10
+    syscall
+	
+<-grade->
+.data
+InvalidInput: .asciiz "Invalid Input\n"
+OutputA: .asciiz "Grade A\n"
+OutputB: .asciiz "Grade B\n"
+OutputC: .asciiz "Grade C\n"
+OutputD: .asciiz "Grade D\n"
+OutputF: .asciiz "Grade F\n"
+Prompt: .asciiz "Enter the grade (0-100): \n"
+
+.text
+main:
+    # Prompt the user for input
+    la $a0, Prompt        # Load the prompt message
+    li $v0, 4             # Print string syscall
+    syscall
+
+    # Read the grade from the user
+    li $v0, 5             # Read integer syscall
+    syscall
+    move $s0, $v0         # Store the user input in $s0
+
+    # Check if input is invalid (less than 0 or greater than 100)
+    slti $t1, $s0, 0      # $t1 = 1 if $s0 < 0
+    sgt $t2, $s0, 100     # $t2 = 1 if $s0 > 100
+    or $t1, $t1, $t2      # $t1 = 1 if $s0 < 0 or $s0 > 100
+    bnez $t1, invalid     # Branch if invalid input
+
+    # Check for Grade A (90-100)
+    sge $t1, $s0, 90      # $t1 = 1 if $s0 >= 90
+    bnez $t1, grade_A     # Branch if $s0 >= 90
+
+    # Check for Grade B (80-89)
+    sge $t1, $s0, 80      # $t1 = 1 if $s0 >= 80
+    bnez $t1, grade_B     # Branch if $s0 >= 80
+
+    # Check for Grade C (70-79)
+    sge $t1, $s0, 70      # $t1 = 1 if $s0 >= 70
+    bnez $t1, grade_C     # Branch if $s0 >= 70
+
+    # Check for Grade D (60-69)
+    sge $t1, $s0, 60      # $t1 = 1 if $s0 >= 60
+    bnez $t1, grade_D     # Branch if $s0 >= 60
+
+    # Else Grade F
+    j grade_F
+
+invalid:
+    la $a0, InvalidInput  # Load invalid input message
+    j print_end
+
+grade_A:
+    la $a0, OutputA       # Load "Grade A" message
+    j print_end
+
+grade_B:
+    la $a0, OutputB       # Load "Grade B" message
+    j print_end
+
+grade_C:
+    la $a0, OutputC       # Load "Grade C" message
+    j print_end
+
+grade_D:
+    la $a0, OutputD       # Load "Grade D" message
+    j print_end
+
+grade_F:
+    la $a0, OutputF       # Load "Grade F" message
+
+print_end:
+    li $v0, 4             # Print string syscall
+    syscall
+    li $v0, 10            # Exit syscall
+    syscall
+<largest>
+.data
+prompt1: .asciiz "Enter first number: "
+prompt2: .asciiz "Enter second number: "
+prompt3: .asciiz "Enter third number: "
+resultMsg: .asciiz "Smallest of three numbers is: "
+
+.text
+.globl main
+
+main:
+    # Prompt and read first number
+    li $v0, 4
+    la $a0, prompt1
+    syscall
+    li $v0, 5
+    syscall
+    move $t0, $v0
+
+    # Prompt and read second number
+    li $v0, 4
+    la $a0, prompt2
+    syscall
+    li $v0, 5
+    syscall
+    move $t1, $v0
+
+    # Prompt and read third number
+    li $v0, 4
+    la $a0, prompt3
+    syscall
+    li $v0, 5
+    syscall
+    move $t2, $v0
+
+    # Compare numbers
+    move $t3, $t0    # Assume $t0 is smallest
+    blt $t1, $t3, update_t3
+    blt $t2, $t3, update_t3
+
+    j print_result
+
+update_t3:
+    move $t3, $t1
+    blt $t2, $t3, update_t2
+    j print_result
+
+update_t2:
+    move $t3, $t2
+
+print_result:
+    li $v0, 4
+    la $a0, resultMsg
+    syscall
+    move $a0, $t3
+    li $v0, 1
+    syscall
+
+    # Exit
+    li $v0, 10
+    syscall
