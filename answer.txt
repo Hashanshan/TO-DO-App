@@ -1,0 +1,406 @@
+package test2;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class testibg {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		//set property to launch chrome driver 
+				System.setProperty("webdriver.chrome.driver", "C:/Users/pcc/Desktop/eclips/chromedriver-win64/chromedriver.exe"); 
+				//initialize chrome driver instance 
+				WebDriver driver = new ChromeDriver(); 
+				//load and view the local file using chrome 
+				driver.navigate().to("file:///C:/Users/pcc/Downloads/registration.html"); 
+				//set browser screen full size 
+				driver.manage().window().maximize();
+		
+ 
+		driver.findElement(By.id("fn2")).sendKeys("kathir"); 
+		driver.findElement(By.name("pass1")).sendKeys("0123"); 
+		driver.findElement(By.name("pass2")).sendKeys("0123"); 
+		driver.findElement(By.id("email")).sendKeys("test@gmail.com"); 
+		driver.findElement(By.name("mobile")).sendKeys("0771234567"); 
+		driver.findElement(By.id("description")).sendKeys("welcome to selanium testing"); 
+		//to check by using webelement
+		WebElement element = driver.findElement(By.name("fn")); element.sendKeys("kamal");
+		//radio button verification
+		WebElement radiol = driver.findElement(By.id("male")); radiol.click();
+		//checkbox verification 
+		WebElement option1 = driver.findElement(By.className("automation2"));option1.click();
+		WebElement option2 =driver.findElement(By.className("automation3")); option2.click();
+		//dropdown verification
+		driver.findElement(By.id("country")).sendKeys("Sri Lanka");
+	}
+
+}
+
+// TODO Auto-generated method stub
+		//set property to launch chrome driver 
+		System.setProperty("webdriver.chrome.driver", "C:/Users/pcc/Desktop/eclips/chromedriver-win64/chromedriver.exe"); 
+		//initialize chrome driver instance 
+		WebDriver driver = new ChromeDriver(); 
+		//load and view the local file using chrome 
+		driver.navigate().to("http://localhost/employee/admin/index.php"); 
+		//set browser screen full size 
+		driver.manage().window().maximize(); 
+	
+		driver.findElement(By.name("username")).sendKeys("thenu"); 
+		driver.findElement(By.name("password")).sendKeys("thenu123");
+
+		//click the login button 
+		driver.findElement(By.xpath("//button[text()='Login']")).click();
+		//the space after Login is for the arrow icon in the button design
+		//can only use in form
+		driver.findElement(By.xpath("//button[text()='Login ']")).submit();
+		//another way
+		driver.findElement(By.xpath("//button [contains (text(), 'Login ')]")).click();
+		//here the difference between [text()='"] and [contains(text(),"")] is [text()"] is checking absolute match but [contains(text().SE is looking for relative match
+		//click the cancel button
+		driver.findElement(By.xpath("//button [text()='Reset']")).click();
+		//the space after Reset is for the refresh icon in the button design
+		//checking and validating the login input fields are working fine
+		WebElement inputUserName = driver.findElement(By.name("username"));inputUserName.sendKeys("");
+		WebElement inputUserPassword =driver.findElement(By.name("password"));inputUserPassword.sendKeys("admin123");
+		
+		if(inputUserName.getAttribute("value").isEmpty()) {
+			System.out.println("Username is Empty");} 
+		else if(inputUserPassword.getAttribute("value").isEmpty()) {
+			System.out.println("Password is Empty");
+		}
+		else {
+		driver.findElement(By.xpath("//button[text()='Login']")).click();}
+		
+		
+		
+		WebElement inputUserName = driver.findElement(By.xpath("//input[@name='username']")); inputUserName.sendKeys("admin");
+		WebElement inputUserPassword = driver.findElement(By.xpath("//input[@name ='passwort']")); inputUserPassword.sendKeys("admin123");
+
+		if(inputUserName.getAttribute("value").isEmpty()) { System.out.println("Username is Empty");
+		}
+		else if(inputUserPassword.getAttribute("value").isEmpty()) {System.out.println("Password is Empty");
+		}
+	    else{
+
+			driver.findElement(By.xpath("//button[text()='Login ']")).click();}
+
+			
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class detail_form {
+
+    public static void main(String[] args) {
+
+        // Set the path for ChromeDriver (update the path with the correct one on your machine)
+        System.setProperty("webdriver.chrome.driver", "C://path-to-your//chromedriver.exe");
+
+        // Initialize WebDriver
+        WebDriver driver = new ChromeDriver();
+
+        // Open the index.html page (make sure the path is correct for your file)
+        driver.get("file:///path/to/Source_Data_CS3212/index.html");
+
+        // Maximize the browser window
+        driver.manage().window().maximize();
+
+        // Fill out the form with the required details
+        driver.findElement(By.name("firstname")).sendKeys("Joseph Vijay"); // Enter first name
+        driver.findElement(By.name("lastname")).sendKeys("Chandrasekhar"); // Enter last name
+        driver.findElement(By.name("dob")).sendKeys("2001-06-10"); // Enter date of birth
+        driver.findElement(By.name("age")).sendKeys("22"); // Enter age
+        driver.findElement(By.name("email")).sendKeys("vijay@yahoo.com"); // Enter email
+        driver.findElement(By.name("phone")).sendKeys("+9461 768 6547"); // Enter phone number
+        driver.findElement(By.name("address")).sendKeys("64, Kaveri Street, Saligramam, Chennai 600093, Tamil Nadu, India"); // Enter address
+
+        // Select gender (Male)
+        driver.findElement(By.name("gender")).click(); // Select "Male" gender
+
+        // Select hobbies (Drawing, Dancing)
+        driver.findElement(By.name("hobbies")).click(); // Select "Drawing"
+        driver.findElement(By.name("hobbies")).click(); // Select "Dancing"
+
+        // Enter course (B.Tech)
+        driver.findElement(By.name("course")).sendKeys("B.Tech"); // Enter course
+
+        // Enter password and retype password
+        driver.findElement(By.name("password")).sendKeys("vijaya@123456"); // Enter password
+        driver.findElement(By.name("retype_password")).sendKeys("vijaya@123456"); // Enter retype password
+
+        // Check if password and retype password are the same
+        String password = driver.findElement(By.name("password")).getAttribute("value");
+        String retypePassword = driver.findElement(By.name("retype_password")).getAttribute("value");
+
+        if (password.equals(retypePassword)) {
+            System.out.println("Passwords are equal");
+        } else {
+            System.out.println("Passwords are not equal");
+        }
+
+        // Fill the Qualification table with the provided data
+        driver.findElement(By.name("results")).sendKeys("2A, B"); // Enter results
+        driver.findElement(By.name("zscore")).sendKeys("1.225"); // Enter Z-score
+        driver.findElement(By.name("district_rank")).sendKeys("1"); // Enter district rank
+
+        // Close the browser
+        driver.quit();
+    }
+}
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class user_test {
+
+    public static void main(String[] args) {
+
+        // Set the path for ChromeDriver (update the path with the correct one on your machine)
+        System.setProperty("webdriver.chrome.driver", "C://path-to-your//chromedriver.exe");
+
+        // Initialize WebDriver
+        WebDriver driver = new ChromeDriver();
+
+        // Step i: Open the page
+        driver.get("http://localhost/EmployeeUser/index.php");
+
+        // Step ii: Maximize the window
+        driver.manage().window().maximize();
+
+        // Step iii: Set timeout for page load
+        driver.manage().timeouts().pageLoadTimeout(30, java.util.concurrent.TimeUnit.SECONDS);
+
+        // Step iv: Click the admin login
+        driver.findElement(By.id("admin-login")).click();
+
+        // Step v: Enter admin login username and password
+        WebElement usernameField = driver.findElement(By.name("username"));
+        WebElement passwordField = driver.findElement(By.name("password"));
+
+        // Check if fields are empty
+        if (usernameField.getAttribute("value").isEmpty()) {
+            System.out.println("Username is empty");
+        } else if (passwordField.getAttribute("value").isEmpty()) {
+            System.out.println("Password is empty");
+        } else {
+            // Enter credentials and login
+            driver.findElement(By.name("username")).sendKeys("admin@gmail.com");
+            driver.findElement(By.name("password")).sendKeys("admin@12345");
+
+            // Click login button
+            driver.findElement(By.name("login")).click();
+        }
+
+        // Step vi: Click the user-side menu and check URL validation
+        driver.findElement(By.id("user-menu")).click();
+
+        // Validate current URL
+        String currentUrl = driver.getCurrentUrl();
+        String expectedUrl = "http://localhost/EmployeeUser/user_dashboard.php";
+        if (currentUrl.equals(expectedUrl)) {
+            System.out.println("URL Validation Success!");
+        } else {
+            System.out.println("URL Validation Failed!");
+        }
+
+        // Step vii: Click the show entries dropdown and print selected value
+        driver.findElement(By.id("entries-dropdown")).sendKeys("10"); // Select by index or value
+        System.out.println("The Selected Option is: " + driver.findElement(By.id("entries-dropdown")).getAttribute("value"));
+
+        // Step viii: Search for a user
+        driver.findElement(By.name("search")).sendKeys("Ad"); // Search value: "Ad"
+
+        // Step ix: Add a new user
+        driver.findElement(By.id("add-user")).click();
+
+        driver.findElement(By.name("username")).sendKeys("ram@gmail.com");
+        driver.findElement(By.name("password")).sendKeys("ram@12345");
+        driver.findElement(By.name("firstname")).sendKeys("Ram");
+        driver.findElement(By.name("lastname")).sendKeys("Gopal");
+
+        driver.findElement(By.id("save-user")).click();
+
+        // Handle user saving alert
+        Alert addUserAlert = driver.switchTo().alert();
+        System.out.println("User Saving Alert Message is: " + addUserAlert.getText());
+        addUserAlert.accept();
+
+        // Step x: Delete the user
+        driver.findElement(By.id("delete-user-ram")).click();
+
+        // Handle delete confirmation alert
+        Alert deleteUserAlert = driver.switchTo().alert();
+        System.out.println("User Deleting Alert Message is: " + deleteUserAlert.getText());
+        deleteUserAlert.dismiss();
+
+        // Step xi: Update the user (Change last name)
+        driver.findElement(By.id("edit-user-ram")).click();
+
+        driver.findElement(By.name("lastname")).clear();
+        driver.findElement(By.name("lastname")).sendKeys("User");
+
+        driver.findElement(By.id("save-edit")).click();
+
+        // Handle user updating alert
+        Alert updateUserAlert = driver.switchTo().alert();
+        System.out.println("User Updating Alert Message is: " + updateUserAlert.getText());
+        updateUserAlert.accept();
+
+        // Step xii: Logout from the website
+        driver.findElement(By.id("logout")).click();
+
+        // Close the browser
+        driver.quit();
+    }
+}
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+public class UserEmployeeTest {
+
+    // Initialize WebDriver (for Chrome browser)
+    WebDriver driver;
+
+    @BeforeTest
+    public void setup() {
+        // Set the ChromeDriver path (adjust the path as necessary)
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+
+        // Initialize the WebDriver
+        driver = new ChromeDriver();
+
+        // Maximize the browser window
+        driver.manage().window().maximize();
+
+        // Set an implicit wait for elements to be found
+        driver.manage().timeouts().implicitlyWait(10, java.util.concurrent.TimeUnit.SECONDS);
+    }
+
+    @Test(priority = 1)
+    public void loadPage() {
+        // Load the users.php page
+        driver.get("http://localhost/users.php");
+
+        // Check if the page has loaded successfully by verifying page title or an element
+        String pageTitle = driver.getTitle();
+        Assert.assertEquals(pageTitle, "Employee System"); // Replace with your actual page title
+    }
+
+    @Test(priority = 2, dependsOnMethods = "loadPage")
+    public void loginTest() {
+        // Find the username and password fields, and the login button
+        WebElement usernameField = driver.findElement(By.name("username"));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.name("login"));
+
+        // Enter the username and password
+        usernameField.sendKeys("admin");
+        passwordField.sendKeys("admin123");
+
+        // Click the login button
+        loginButton.click();
+
+        // Check if login was successful by verifying if we are on the dashboard page
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertTrue(currentUrl.contains("dashboard"));
+    }
+
+    @Test(priority = 3)
+    public void searchEmployee() {
+        // Find the search field and the search button
+        WebElement searchField = driver.findElement(By.name("search"));
+        WebElement searchButton = driver.findElement(By.name("search-button"));
+
+        // Enter the search query (employee's first name starting with "ab")
+        searchField.sendKeys("ab");
+
+        // Click the search button
+        searchButton.click();
+
+        // Check if data is found
+        WebElement searchResult = driver.findElement(By.id("search-result"));
+        if (searchResult.getText().isEmpty()) {
+            System.out.println("Data undetected");
+        } else {
+            System.out.println("Data detected");
+        }
+    }
+
+    @Test(priority = 4)
+    public void deleteEmployee() {
+        // Find the delete button of a specific employee (Assuming the ID is "delete-emp-1")
+        WebElement deleteButton = driver.findElement(By.id("delete-emp-1"));
+
+        // Click the delete button
+        deleteButton.click();
+
+        // Find and handle the confirmation alert (assuming a confirmation message appears)
+        WebElement confirmDeleteButton = driver.findElement(By.id("confirm-delete"));
+        confirmDeleteButton.click();
+
+        // Verify if the employee is deleted (Assuming some confirmation message appears)
+        WebElement confirmationMessage = driver.findElement(By.id("delete-confirmation"));
+        Assert.assertTrue(confirmationMessage.getText().contains("Employee deleted"));
+    }
+
+    @Test(priority = 5)
+    public void updateEmployee() {
+        // Find and click the "Update User" button
+        WebElement updateButton = driver.findElement(By.id("update-user-1"));
+        updateButton.click();
+
+        // Close the edit user popup window
+        WebElement closeEditPopupButton = driver.findElement(By.id("close-edit-popup"));
+        closeEditPopupButton.click();
+
+        // Verify if the popup was closed successfully (assuming there's a visible confirmation)
+        Assert.assertTrue(driver.findElement(By.id("edit-popup")).isDisplayed() == false);
+    }
+
+    @Test(priority = 6)
+    public void addNewEmployee() {
+        // Find and click the "Add New" button
+        WebElement addNewButton = driver.findElement(By.id("add-new-user"));
+        addNewButton.click();
+
+        // Close the add new user popup window
+        WebElement closeAddPopupButton = driver.findElement(By.id("close-add-popup"));
+        closeAddPopupButton.click();
+
+        // Verify if the popup was closed successfully
+        Assert.assertTrue(driver.findElement(By.id("add-popup")).isDisplayed() == false);
+    }
+
+    @Test(priority = 7)
+    public void logoutTest() {
+        // Find and click the "Logout" button
+        WebElement logoutButton = driver.findElement(By.id("logout"));
+        logoutButton.click();
+
+        // Verify if the user is logged out successfully (check if redirected to the login page)
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertTrue(currentUrl.contains("login"));
+    }
+
+    @AfterTest
+    public void tearDown() {
+        // Close the browser after all tests are completed
+        driver.quit();
+    }
+}
+
+
